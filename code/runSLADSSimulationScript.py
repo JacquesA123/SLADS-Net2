@@ -3,7 +3,7 @@ import sys
 import os
 import numpy as np
 from scipy.io import savemat
-import cPickle
+import pickle
 
 def runSLADSSimulationScript(FolderName,ImageType,ImageExtension,TestingImageSet,TrainingImageSet,SizeImage,c,StoppingPercentage,StoppingThrehsold,Classify,PercentageInitialMask,MaskType,BatchSample,PlotResult,NumSamplesPerIter,Update_ERD,MinWindSize,MaxWindSize):
     
@@ -57,7 +57,7 @@ def runSLADSSimulationScript(FolderName,ImageType,ImageExtension,TestingImageSet
         sys.exit('Error!!! Check folder ./ResultsAndData/TrainingSavedFeatures/TrainingDB_' + TrainingImageSet + ' for folder c_' + str(c))                                                                                                                                  
 #    Theta=np.transpose(np.load(ThetaLoadPath +'Theta.npy'))
     with open(ThetaLoadPath + 'Theta.pkl', 'rb') as fid:
-        Theta = cPickle.load(fid)
+        Theta = pickle.load(fid)
     # Load initial measurement mask
     loadPathInitialMask = CodePath + 'ResultsAndData' + os.path.sep + 'InitialSamplingMasks'
     Mask = loadOrGenerateInitialMask(loadPathInitialMask,MaskType,InitialMask,SizeImage)

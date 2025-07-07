@@ -52,7 +52,7 @@ def pathOrder(unvisit, measured_value, x_init):
         for j in range(i+1, x_len):
 #            temp_arr[j] = np.sqrt( (path[i,0] - path[j,0])**2 + (path[i,1] - path[j,1])**2 )
             temp_arr[j] = np.abs(path[i,0] - path[j,0]) + np.abs(path[i,1] - path[j,1])
-        i#dx = np.argmin(temp_arr)
+        #idx = np.argmin(temp_arr)
         idx = np.argmin(dist + temp_arr)
         dist = dist + np.min(temp_arr)
         

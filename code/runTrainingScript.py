@@ -3,7 +3,7 @@ import os
 import numpy as np
 import sys
 
-import cPickle
+import pickle
 
 def runTrainingScript(ImageType,ImageExtension,TrainingImageSet,SizeImage,c_vec,StopPercentageSLADS,FindStopThresh,MeasurementPercentageVector,WindowSize,Update_ERD,MinWindSize,MaxWindSize,PercentageInitialMask,MaskType,DesiredTD,NumReconsSLADS,PercOfRD):
     
@@ -13,6 +13,7 @@ def runTrainingScript(ImageType,ImageExtension,TrainingImageSet,SizeImage,c_vec,
     from performTraining import performTraining
     from performSLADStoFindC import performSLADStoFindC
     from findStoppingThreshold import findStoppingThreshold
+    
     Classify = 'N'
     Resolution = 1
     FolderName = 'TrainingDB_'
@@ -20,6 +21,7 @@ def runTrainingScript(ImageType,ImageExtension,TrainingImageSet,SizeImage,c_vec,
     reconPercVector = np.linspace(PercentageInitialMask, StopPercentageSLADS, num=NumReconsSLADS*(StopPercentageSLADS-PercentageInitialMask), endpoint=False)
     CodePath = '.' + os.path.sep
     TrainingDataPath = CodePath + 'ResultsAndData' + os.path.sep + 'TrainingData' + os.path.sep + FolderName + str(TrainingImageSet) + os.path.sep
+    
     if not os.path.exists(TrainingDataPath):                                                                                                                          
         sys.exit('Error!!! The folder ' + TrainingDataPath + ' does not exist. Check entry for ' + TrainingImageSet)
     if not os.path.exists(TrainingDataPath + os.path.sep + 'Images'):                                                                                                                      
@@ -60,9 +62,9 @@ def runTrainingScript(ImageType,ImageExtension,TrainingImageSet,SizeImage,c_vec,
 #    Theta = np.load(ThetaLoadPath + 'Theta.npy')    
 #    np.save(ThetaSavePath + 'Theta', Theta)
     with open(ThetaLoadPath + 'Theta.pkl', 'rb') as fid:
-        Theta = cPickle.load(fid)
+        Theta = pickle.load(fid)
     with open(ThetaSavePath + 'Theta.pkl', 'wb') as fid:
-        cPickle.dump(Theta, fid)
+        pickle.dump(Theta, fid)
     
     
     

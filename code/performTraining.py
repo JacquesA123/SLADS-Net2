@@ -7,9 +7,9 @@ from scipy.io import loadmat
 from sklearn import linear_model
 from sklearn import svm
 from sklearn.neural_network import MLPRegressor as nnr
-import cPickle
+import pickle
 
-from scipy import misc
+from imageio import imread
 import glob
 import sys
 import random
@@ -20,58 +20,77 @@ from computeFeatures import computeFeatures
 from computeDifference import computeDifference
 
 def performTraining(MeasurementPercentageVector,TrainingDataPath,ImageType,ImageExtension,SizeImage,TrainingInfo,Resolution,WindowSize,c_vec,PercOfRD):
-    ImNum = 0
     
+    ImNum = 0
     loadPathImage = TrainingDataPath + 'Images' + os.path.sep   
     NumTrainingImages = np.size(glob.glob(loadPathImage + '*' + ImageExtension))
+    
     for image_path in glob.glob(loadPathImage + '*' + ImageExtension):
+        
+        # Import image data based on their image extension
         if ImageExtension=='.mat':
             ImgDat=loadmat(image_path)
             Img=ImgDat['img']
         else:
-            Img = misc.imread(image_path)        
+            Img = imread(image_path)        
         if SizeImage[0]!=Img.shape[0] or SizeImage[1]!=Img.shape[1]:
             sys.exit('Error!!! The dimensions you entered in "SizeImage" do not match the dimensions of the training images')
         
         if not os.path.exists(TrainingDataPath + 'FeaturesRegressCoeffs'):
             os.makedirs(TrainingDataPath + 'FeaturesRegressCoeffs')
 
-        for m in range(0,np.size(MeasurementPercentageVector)):
+        for m in range(0, np.size(MeasurementPercentageVector)):
 
             SaveFolder = 'Image_' + str(ImNum+1) + '_Perc_' + str(MeasurementPercentageVector[m])
             SavePath = TrainingDataPath + 'FeaturesRegressCoeffs' + os.path.sep + SaveFolder
             if not os.path.exists(SavePath):
                 os.makedirs(SavePath)
 
-            
+            # Generate a random mask for the image
             Mask = np.zeros((SizeImage[0],SizeImage[1]))
             UnifMatrix = np.random.rand(SizeImage[0],SizeImage[1])
             Mask = UnifMatrix<(MeasurementPercentageVector[m]/100)
             
+            # Get the indices of the measured and unmeasured pixels
             MeasuredIdxs = np.transpose(np.where(Mask==1))
-            UnMeasuredIdxs = np.transpose(np.where(Mask==0))            
+            UnMeasuredIdxs = np.transpose(np.where(Mask==0))
             MeasuredValues = Img[Mask==1]
 
+            # Find the neighbors of the measured pixels
             NeighborValues,NeighborWeights,NeighborDistances = FindNeighbors(TrainingInfo,MeasuredIdxs,UnMeasuredIdxs,MeasuredValues,Resolution)
+            
             ReconValues,ReconImage = ComputeRecons(TrainingInfo,NeighborValues,NeighborWeights,SizeImage,UnMeasuredIdxs,MeasuredIdxs,MeasuredValues)
+            
             AllPolyFeatures=computeFeatures(MeasuredValues,MeasuredIdxs,UnMeasuredIdxs,SizeImage,NeighborValues,NeighborWeights,NeighborDistances,TrainingInfo,ReconValues,ReconImage,Resolution,ImageType)
-            NumRandChoices =  int(PercOfRD*MeasurementPercentageVector[m]*SizeImage[1]*SizeImage[0]/(100*100))
-            OrderForRD = random.sample(range(0,UnMeasuredIdxs.shape[0]), NumRandChoices) 
+            
+            # Calculate the number of random choices for the RDPP
+            NumRandChoices =  int(PercOfRD * MeasurementPercentageVector[m] * \
+                                  SizeImage[1] * SizeImage[0] / (100*100)) # Scale by downsample of original image size
+            
+            # Generate a random order for the unmeasured pixels
+            OrderForRD = random.sample(range(0, UnMeasuredIdxs.shape[0]), NumRandChoices) 
             PolyFeatures = AllPolyFeatures[OrderForRD,:]
-            RDPP = computeDifference(Img,ReconImage,ImageType)+0
-            RDPP.astype(int)
-            RDPPWithZeros = np.lib.pad(RDPP,(int(np.floor(WindowSize[0]/2)),int(np.floor(WindowSize[1]/2))),'constant',constant_values=0)
+            
+            # RDPP = difference between original and reconstructed image
+            # I presume it stands for Reduction in Disortion (RD) per pixel, but I could be wrong
+            RDPP = computeDifference(Img, ReconImage, ImageType).astype(int)
+            
+            # Pad the RDPP with zeros to account for the window size
+            RDPPWithZeros = np.pad(RDPP, (int(np.floor(WindowSize[0]/2)), int(np.floor(WindowSize[1]/2))), \
+                                   'constant', constant_values=0)
+            
+            # 
             ImgAsBlocks = im2col(RDPPWithZeros,WindowSize)
             MaskVect = np.ravel(Mask)
-            ImgAsBlocksOnlyUnmeasured = ImgAsBlocks[:,np.logical_not(MaskVect)]
-            temp = np.zeros((WindowSize[0]*WindowSize[1],NumRandChoices))
+            ImgAsBlocksOnlyUnmeasured = ImgAsBlocks[:, np.logical_not(MaskVect)]
+            temp = np.zeros((WindowSize[0]*WindowSize[1], NumRandChoices))
             for c in c_vec:
-                sigma = NeighborDistances[:,0]/c
+                sigma = NeighborDistances[:, 0] / c
                 cnt = 0;
                 for l in OrderForRD:
-                    Filter = generateGaussianKernel(sigma[l],WindowSize)
-                    temp[:,cnt] = ImgAsBlocksOnlyUnmeasured[:,l]*Filter
-                    cnt=cnt+1
+                    Filter = generateGaussianKernel(sigma[l], WindowSize)
+                    temp[:, cnt] = ImgAsBlocksOnlyUnmeasured[:, l] * Filter
+                    cnt = cnt + 1
                 RD = np.sum(temp, axis=0)
                 SavePath_c = SavePath + os.path.sep + 'c_' + str(c)
 
@@ -79,20 +98,23 @@ def performTraining(MeasurementPercentageVector,TrainingDataPath,ImageType,Image
                     os.makedirs(SavePath_c)
                 
                 np.save(SavePath_c + os.path.sep + 'RD', RD)        
-                np.save(SavePath_c + os.path.sep + 'OrderForRD', OrderForRD)   
+                np.save(SavePath_c + os.path.sep + 'OrderForRD', OrderForRD) 
+                  
             np.save(SavePath + os.path.sep + 'Mask', Mask)   
             np.save(SavePath + os.path.sep + 'ReconImage', ReconImage)
             np.save(SavePath + os.path.sep + 'PolyFeatures', PolyFeatures)
+            
         if ImNum == 0:
             print('Feature Extraction Complete for ' + str(ImNum+1) + ' Image' )
         else:
             print('Feature Extraction Complete for ' + str(ImNum+1) + ' Images' )
+        
         ImNum = ImNum + 1
         
-    try:
-        Img
-    except NameError:
-        sys.exit('Error!!! There are no images in ' + loadPathImage + ' that have the extention ' + ImageExtension)
+    #try:
+    #    Img
+    #except NameError:
+    #    sys.exit('Error!!! There are no images in ' + loadPathImage + ' that have the extention ' + ImageExtension)
         
     for c in c_vec:
         FirstLoop = 1
@@ -111,7 +133,7 @@ def performTraining(MeasurementPercentageVector,TrainingDataPath,ImageType,Image
                         FirstLoop = 0                  
                     else:
                         TempPolyFeatures = np.column_stack((PolyFeatures[:,0:25],PolyFeatures[:,26]))                    
-                        BigPolyFeatures = np.row_stack((BigPolyFeatures,TempPolyFeatures))
+                        BigPolyFeatures = np.vstack((BigPolyFeatures,TempPolyFeatures))
                         BigRD = np.append(BigRD,RD)
                 else:
                     if FirstLoop==1:
@@ -120,7 +142,7 @@ def performTraining(MeasurementPercentageVector,TrainingDataPath,ImageType,Image
                         FirstLoop = 0                  
                     else:
                         TempPolyFeatures = PolyFeatures               
-                        BigPolyFeatures = np.row_stack((BigPolyFeatures,TempPolyFeatures))
+                        BigPolyFeatures = np.vstack((BigPolyFeatures,TempPolyFeatures))
                         BigRD = np.append(BigRD,RD)                    
                     
                        
@@ -145,7 +167,7 @@ def performTraining(MeasurementPercentageVector,TrainingDataPath,ImageType,Image
             os.makedirs(SavePath_c) 
 #        np.save(SavePath_c + os.path.sep + 'Theta', Theta)
         with open(SavePath_c + os.path.sep + 'Theta.pkl', 'wb') as fid:
-            cPickle.dump(regr, fid)
+            pickle.dump(regr, fid)
         
         
         print("Regressions Complete for c = " + str(c))

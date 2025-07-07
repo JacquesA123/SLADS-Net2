@@ -15,6 +15,7 @@ class TrainingInfo:
             self.PAP_Beta=args[1]
             self.PAP_InitType=args[2]
             self.PAP_ScaleMax=args[3]
+            
 class InitialMask:
     def initialize(self,RowSz,ColSz,MaskType,MaskNumber,Percentage):
         self.RowSz = RowSz

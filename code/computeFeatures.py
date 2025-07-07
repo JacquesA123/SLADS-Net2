@@ -18,7 +18,6 @@ def computeFeatures(MeasuredValues,MeasuredIdxs,UnMeasuredIdxs,SizeImage,Neighbo
     Feature[:,4] = GradientImageY[UnMeasuredIdxs[:,0],UnMeasuredIdxs[:,1]]
     Feature[:,5] = GradientImageX[UnMeasuredIdxs[:,0],UnMeasuredIdxs[:,1]]
 
-
     PolyFeatures = computePolyFeatures(Feature)
     return PolyFeatures
 
@@ -32,14 +31,12 @@ def computeGradientFeatures(MeasuredValues,MeasuredIdxs,UnMeasuredIdxs,SizeImage
         GradientImageY=abs(GradientImageY)
     return(GradientImageX,GradientImageY)
 
-
 def computeStDivFeatures(NeighborValues,NeighborWeights,TrainingInfo,ReconValues,ImageType):
     
     DiffVect = computeDifference(NeighborValues,np.transpose(matlib.repmat(ReconValues,np.shape(NeighborValues)[1],1)),ImageType)
     Feature_0 = np.sum(NeighborWeights*DiffVect,axis=1)
     Feature_1 = np.sqrt((1/TrainingInfo.NumNbrs)*np.sum(np.power(DiffVect,2),axis=1))
     return(Feature_0,Feature_1)
-
 
 def computeDensityDistanceFeatures(NeighborDistances,NeighborWeights,SizeImage,TrainingInfo,ReconValues,ImageType):
     
@@ -59,7 +56,6 @@ def computeDensityDistanceFeatures(NeighborDistances,NeighborWeights,SizeImage,T
 #
 #    return PolyFeatures
     
-    
 from sklearn.kernel_approximation import RBFSampler
     
 def computePolyFeatures(Feature):
@@ -69,13 +65,4 @@ def computePolyFeatures(Feature):
 
 #    PolyFeatures = np.copy(Feature)
     
-    return PolyFeatures    
-    
-    
-    
-    
-    
-    
-    
-    
-
+    return PolyFeatures

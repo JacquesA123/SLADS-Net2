@@ -70,5 +70,24 @@ MaxWindSize = 10
 ###############################################################################
 ############################ END USER INPUTS ##################################
 ############################################################################### 
-from runSLADSScript import runSLADSScript
-runSLADSScript(FolderName,ImageType,TrainingImageSet,SizeImage,c,StoppingPercentage,StoppingThrehsold,Classify,PercentageInitialMask,MaskType,BatchSample,PlotResult,NumSamplesPerIter,Update_ERD,MinWindSize,MaxWindSize)
+
+from code.runSLADSScript import runSLADSScript
+
+runSLADSScript(
+    FolderName,
+    ImageType,
+    TrainingImageSet,
+    SizeImage,
+    c,
+    StoppingPercentage,
+    StoppingThrehsold,
+    Classify,
+    PercentageInitialMask,
+    MaskType,
+    BatchSample,
+    PlotResult,
+    NumSamplesPerIter,
+    Update_ERD,
+    MinWindSize,
+    MaxWindSize
+)
