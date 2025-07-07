@@ -15,8 +15,6 @@ def updateERDandFindNewLocationFirst(Mask,MeasuredValues,MeasuredIdxs,UnMeasured
 
     return(Mask,MeasuredValues,ERDValues,ReconValues,ReconImage,NewIdxs,MaxIdxsVect)
 
-
-
 def updateERDandFindNewLocationAfter(Mask,MeasuredValues,MeasuredIdxs,UnMeasuredIdxs,Theta,SizeImage,TrainingInfo,Resolution,ImageType,UpdateERDParams,BatchSamplingParams,StopCondFuncVal,IterNum,NumSamples,NewIdxs,ReconValues,ReconImage,ERDValues,MaxIdxsVect):
     """
     This function allows the user to choose either to fully recompute or update the ERD values as an iteration over the previous. UpdateERDParams.Do = 'Y' separates this method's functionality from updateERDandFindNewLocationFirst().

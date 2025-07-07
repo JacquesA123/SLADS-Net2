@@ -15,7 +15,7 @@ ImageType = 'C'
 # Image extention
 ImageExtension = '.tif'
 
-# if TrainingDB_X used enter 'X'             
+# if TrainingDB_X used enter 'X'
 TrainingImageSet = '1'
 
 # Image resolution in pixels    

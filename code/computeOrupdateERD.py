@@ -44,7 +44,6 @@ def updateERD(Mask,MeasuredIdxs,UnMeasuredIdxs,MeasuredValues,Theta,SizeImage,Tr
             UpdateRadius=int(UpdateRadius*UpdateERDParams.IncreaseRadiusBy)
         else:
             Done = 1
-
     
     # Find neighbors of unmeasured locations
     SmallNeighborValues,SmallNeighborWeights,SmallNeighborDistances = FindNeighbors(TrainingInfo,MeasuredIdxs,SmallUnMeasuredIdxs,MeasuredValues,Resolution)

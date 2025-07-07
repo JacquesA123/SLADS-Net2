@@ -18,7 +18,7 @@ def runTrainingScript(ImageType,ImageExtension,TrainingImageSet,SizeImage,c_vec,
     Resolution = 1
     FolderName = 'TrainingDB_'
     c_vec=c_vec.astype(float);StopPercentageSLADS = float(StopPercentageSLADS);PercentageInitialMask = float(PercentageInitialMask);MeasurementPercentageVector=MeasurementPercentageVector.astype(float)    
-    reconPercVector = np.linspace(PercentageInitialMask, StopPercentageSLADS, num=NumReconsSLADS*(StopPercentageSLADS-PercentageInitialMask), endpoint=False)
+    reconPercVector = np.linspace(PercentageInitialMask, StopPercentageSLADS, num=int(NumReconsSLADS*(StopPercentageSLADS-PercentageInitialMask)), endpoint=False)
     CodePath = '.' + os.path.sep
     TrainingDataPath = CodePath + 'ResultsAndData' + os.path.sep + 'TrainingData' + os.path.sep + FolderName + str(TrainingImageSet) + os.path.sep
     
@@ -58,15 +58,12 @@ def runTrainingScript(ImageType,ImageExtension,TrainingImageSet,SizeImage,c_vec,
         
     ThetaLoadPath = 'ResultsAndData' + os.path.sep + 'TrainingData' + os.path.sep + TrainingDBName + os.path.sep + 'c_' + str(Best_c) + os.path.sep
     
-
-#    Theta = np.load(ThetaLoadPath + 'Theta.npy')    
-#    np.save(ThetaSavePath + 'Theta', Theta)
+    #Theta = np.load(ThetaLoadPath + 'Theta.npy')    
+    #np.save(ThetaSavePath + 'Theta', Theta)
     with open(ThetaLoadPath + 'Theta.pkl', 'rb') as fid:
         Theta = pickle.load(fid)
     with open(ThetaSavePath + 'Theta.pkl', 'wb') as fid:
         pickle.dump(Theta, fid)
-    
-    
     
     # Find the Threshold on stopping condition that corresponds to the desired total distortion (TD) value set above
     if FindStopThresh=='Y':   

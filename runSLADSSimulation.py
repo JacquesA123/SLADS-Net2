@@ -9,7 +9,7 @@ import timeit
 ############## USER INPUTS: L-0 ###############################################
 ###############################################################################
 
-i = 9  ## the index of testing examples in /ResultsAndData/TestingImages/
+i = 12  ## the index of testing examples in /ResultsAndData/TestingImages/
 
 # Name of folder to save result in    
 FolderName = 'Example_' + str(i)
@@ -18,7 +18,7 @@ FolderName = 'Example_' + str(i)
 ImageType = 'C'
 
 # Image extention
-ImageExtension = '.png'
+ImageExtension = '.jpg'
 
 # If TestingImageSet_X used enter 'X'
 TestingImageSet = str(i)    
@@ -27,19 +27,19 @@ TestingImageSet = str(i)
 TrainingImageSet = '1'   
 
 # Image resolution in pixels   
-SizeImage = [256,256]
+SizeImage = [256, 256]
 
 # Value of c found in training     
-c=8
+c=2
 
 # Maximum  sampling percentage 
-StoppingPercentage = 40
+StoppingPercentage = 30
 # If you want to use stopping function used, enter threshold (from Training), 
 # else leave at 0      
-StoppingThrehsold = 0
+StoppingThreshold = 0
 
 # Clasification setting
-Classify = 'N'              
+Classify = '2C'              
 # 'N' - no classification needed (already classified or continuous data)
 # '2C' - perform 2 class classification using otsu
 # 'MC' - perform multi-class classification
@@ -55,6 +55,7 @@ MaskType = 'H'
     # 'U': Uniform mask; can choose any percentage
     # 'R': Randomly distributed mask; can choose any percentage
     # 'H': low-dsicrepacy mask; can only choose 1% mask
+    
 # Batch Sampling
 BatchSample = 'N'           
 # If 'Y' set number of samples in each step in L-1 (NumSamplesPerIter)
@@ -71,8 +72,10 @@ NumSamplesPerIter = 10
 # Update ERD or compute full ERD in SLADS
 # with Update ERD, ERD only updated for a window surrounding new measurement
 Update_ERD = 'Y' 
+
 # Smallest ERD update window size permitted
 MinWindSize = 3  
+
 # Largest ERD update window size permitted  
 MaxWindSize = 10  
        
@@ -82,8 +85,8 @@ MaxWindSize = 10
 start = timeit.default_timer()
 
 from runSLADSSimulationScript import runSLADSSimulationScript
-runSLADSSimulationScript(FolderName,ImageType,ImageExtension,TestingImageSet,TrainingImageSet,SizeImage,c,StoppingPercentage,StoppingThrehsold,Classify,PercentageInitialMask,MaskType,BatchSample,PlotResult,NumSamplesPerIter,Update_ERD,MinWindSize,MaxWindSize)
+runSLADSSimulationScript(FolderName,ImageType,ImageExtension,TestingImageSet,TrainingImageSet,SizeImage,c,StoppingPercentage,StoppingThreshold,Classify,PercentageInitialMask,MaskType,BatchSample,PlotResult,NumSamplesPerIter,Update_ERD,MinWindSize,MaxWindSize)
 
 stop = timeit.default_timer()
 
-print stop - start 
+print(stop - start)
