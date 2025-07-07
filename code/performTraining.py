@@ -32,8 +32,9 @@ def performTraining(MeasurementPercentageVector,TrainingDataPath,ImageType,Image
             ImgDat=loadmat(image_path)
             Img=ImgDat['img']
         else:
-            Img = imread(image_path)        
-        if SizeImage[0]!=Img.shape[0] or SizeImage[1]!=Img.shape[1]:
+            Img = imread(image_path)
+                    
+        if SizeImage[0] != Img.shape[0] or SizeImage[1] != Img.shape[1]:
             sys.exit('Error!!! The dimensions you entered in "SizeImage" do not match the dimensions of the training images')
         
         if not os.path.exists(TrainingDataPath + 'FeaturesRegressCoeffs'):
@@ -47,9 +48,9 @@ def performTraining(MeasurementPercentageVector,TrainingDataPath,ImageType,Image
                 os.makedirs(SavePath)
 
             # Generate a random mask for the image
-            Mask = np.zeros((SizeImage[0],SizeImage[1]))
-            UnifMatrix = np.random.rand(SizeImage[0],SizeImage[1])
-            Mask = UnifMatrix<(MeasurementPercentageVector[m]/100)
+            Mask = np.zeros((SizeImage[0], SizeImage[1]))
+            UnifMatrix = np.random.rand(SizeImage[0], SizeImage[1])
+            Mask = UnifMatrix < (MeasurementPercentageVector[m] / 100)
             
             # Get the indices of the measured and unmeasured pixels
             MeasuredIdxs = np.transpose(np.where(Mask==1))
@@ -62,6 +63,8 @@ def performTraining(MeasurementPercentageVector,TrainingDataPath,ImageType,Image
             ReconValues,ReconImage = ComputeRecons(TrainingInfo,NeighborValues,NeighborWeights,SizeImage,UnMeasuredIdxs,MeasuredIdxs,MeasuredValues)
             
             AllPolyFeatures=computeFeatures(MeasuredValues,MeasuredIdxs,UnMeasuredIdxs,SizeImage,NeighborValues,NeighborWeights,NeighborDistances,TrainingInfo,ReconValues,ReconImage,Resolution,ImageType)
+            
+            ### ESTIMATING ERD FROM FEATURES AND RECONSTRUCTIONS USING GAUSSIAN KERNEL TO APPROXIMATE W/ RD ATTENUATION
             
             # Calculate the number of random choices for the RDPP
             NumRandChoices =  int(PercOfRD * MeasurementPercentageVector[m] * \
@@ -79,11 +82,18 @@ def performTraining(MeasurementPercentageVector,TrainingDataPath,ImageType,Image
             RDPPWithZeros = np.pad(RDPP, (int(np.floor(WindowSize[0]/2)), int(np.floor(WindowSize[1]/2))), \
                                    'constant', constant_values=0)
             
-            # 
-            ImgAsBlocks = im2col(RDPPWithZeros,WindowSize)
+            # Gives local neighborhoods as columns in this array
+            ImgAsBlocks = im2col(RDPPWithZeros, WindowSize)
+            
+            # Convert mask into boolean list
             MaskVect = np.ravel(Mask)
+            
+            # Select only local neighborhoods 
             ImgAsBlocksOnlyUnmeasured = ImgAsBlocks[:, np.logical_not(MaskVect)]
+            
+            # ??
             temp = np.zeros((WindowSize[0]*WindowSize[1], NumRandChoices))
+            
             for c in c_vec:
                 sigma = NeighborDistances[:, 0] / c
                 cnt = 0;
@@ -172,13 +182,16 @@ def performTraining(MeasurementPercentageVector,TrainingDataPath,ImageType,Image
         
         print("Regressions Complete for c = " + str(c))
             
-def im2col(Matrix,WidowSize):
+def im2col(Matrix,WindowSize):
+    """
+    Generates an array of windows given by size WindowSize over Matrix, transforms the windows into columns, and then returns the hstack of these columns.
+    """
     M,N = Matrix.shape
-    col_extent = N - WidowSize[1] + 1
-    row_extent = M - WidowSize[0] + 1
-    start_idx = np.arange(WidowSize[0])[:,None]*N + np.arange(WidowSize[1])
-    offset_idx = np.arange(row_extent)[:,None]*N + np.arange(col_extent)
-    out = np.take (Matrix,start_idx.ravel()[:,None] + offset_idx.ravel())
+    col_extent = N - WindowSize[1] + 1
+    row_extent = M - WindowSize[0] + 1
+    start_idx  = np.arange(WindowSize[0])[:,None] * N + np.arange(WindowSize[1])
+    offset_idx = np.arange(row_extent)[:,None] * N    + np.arange(col_extent)
+    out = np.take(Matrix,start_idx.ravel()[:,None] + offset_idx.ravel())
 
     return(out)
     # http://stackoverflow.com/questions/30109068/implement-matlabs-im2col-sliding-in-python
@@ -187,8 +200,8 @@ def generateGaussianKernel(sigma,WindowSize):
     FilterMat = np.ones((WindowSize[0],WindowSize[1]))
     for i in range(0,WindowSize[0]):
         for j in range(0,WindowSize[1]):
-            FilterMat[i][j]=np.exp( -(1/(2*sigma**2)) * np.absolute( ( (i-np.floor(WindowSize[0]/2))**2 +  (j-np.floor(WindowSize[1]/2))**2 ) )  )
-    FilterMat = FilterMat/np.amax(FilterMat)
+            FilterMat[i][j] = np.exp( -(1/(2*sigma**2)) * np.absolute( ( (i-np.floor(WindowSize[0]/2))**2 +  (j-np.floor(WindowSize[1]/2))**2 ) )  )
+    FilterMat = FilterMat / np.amax(FilterMat)
     FilterMat = np.transpose(FilterMat)
     Filter=np.ravel(FilterMat)
     return Filter

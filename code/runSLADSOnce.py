@@ -7,7 +7,6 @@ from scipy.io import savemat
 from skimage import filters
 import pylab
 
-
 from performMeasurements import perfromMeasurements
 from performMeasurements import perfromInitialMeasurements
 from updateERDandFindNewLocation import updateERDandFindNewLocationFirst
@@ -23,6 +22,8 @@ from pathOrder_greedy import pathOrder
 
 
 def runSLADSSimulationOnce(Mask,CodePath,ImageSet,SizeImage,StopCondParams,Theta,TrainingInfo,Resolution,ImageType,UpdateERDParams,BatchSamplingParams,SavePath,SimulationRun,ImNum,ImageExtension,PlotResult,Classify):
+  
+    
   
     MeasuredIdxs = np.transpose(np.where(Mask==1))
     UnMeasuredIdxs = np.transpose(np.where(Mask==0))
@@ -204,12 +205,6 @@ def runSLADSOnce(Mask,CodePath,SizeImage,StopCondParams,Theta,TrainingInfo,Resol
         from plotter import plotAfterSLADS  
         plotAfterSLADS(Mask,ReconImage)
         pylab.show()
-
-
-
-
-
-
 
 
 

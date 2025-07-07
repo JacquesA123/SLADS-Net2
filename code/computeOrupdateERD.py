@@ -12,10 +12,10 @@ def computeFullERD(MeasuredValues,MeasuredIdxs,UnMeasuredIdxs,Theta,SizeImage,Tr
     ReconValues,ReconImage = ComputeRecons(TrainingInfo,NeighborValues,NeighborWeights,SizeImage,UnMeasuredIdxs,MeasuredIdxs,MeasuredValues)
     
     # Compute features
-    PolyFeatures=computeFeatures(MeasuredValues,MeasuredIdxs,UnMeasuredIdxs,SizeImage,NeighborValues,NeighborWeights,NeighborDistances,TrainingInfo,ReconValues,ReconImage,Resolution,ImageType)
+    PolyFeatures = computeFeatures(MeasuredValues,MeasuredIdxs,UnMeasuredIdxs,SizeImage,NeighborValues,NeighborWeights,NeighborDistances,TrainingInfo,ReconValues,ReconImage,Resolution,ImageType)
     
     # Compute ERD
-#    ERDValues = PolyFeatures.dot(Theta)
+    # ERDValues = PolyFeatures.dot(Theta)
     ERDValues = Theta.predict(PolyFeatures)
     
     return(ERDValues,ReconValues,ReconImage)
@@ -29,13 +29,13 @@ def updateERD(Mask,MeasuredIdxs,UnMeasuredIdxs,MeasuredValues,Theta,SizeImage,Tr
     UpdateRadius=int(np.min([UpdateERDParams.MaxRadius,UpdateRadiusTemp]));
 
     updateRadiusMat = np.zeros((SizeImage[0],SizeImage[1]))
-    Done=0
-    while(Done==0):
+    Done = 0
+    while Done == 0:
         if BatchSamplingParams.Do == 'N':
-            updateRadiusMat[max(NewIdxs[0]-UpdateRadius,0):min(NewIdxs[0]+UpdateRadius,SizeImage[0])][:,max(NewIdxs[1]-UpdateRadius,0):min(NewIdxs[1]+UpdateRadius,SizeImage[1])]=1
+            updateRadiusMat[max(NewIdxs[0]-UpdateRadius,0):min(NewIdxs[0]+UpdateRadius,SizeImage[0])][:,max(NewIdxs[1]-UpdateRadius,0):min(NewIdxs[1]+UpdateRadius,SizeImage[1])] = 1
         else:
             for b in range(0,BatchSamplingParams.NumSamplesPerIter):
-                updateRadiusMat[max(NewIdxs[b][0]-UpdateRadius,0):min(NewIdxs[b][0]+UpdateRadius,SizeImage[0])][:,max(NewIdxs[b][1]-UpdateRadius,0):min(NewIdxs[b][1]+UpdateRadius,SizeImage[1])]=1
+                updateRadiusMat[max(NewIdxs[b][0]-UpdateRadius,0):min(NewIdxs[b][0]+UpdateRadius,SizeImage[0])][:,max(NewIdxs[b][1]-UpdateRadius,0):min(NewIdxs[b][1]+UpdateRadius,SizeImage[1])] = 1
     
         updateIdxs = np.where(updateRadiusMat[Mask==0]==1)
         
@@ -43,7 +43,7 @@ def updateERD(Mask,MeasuredIdxs,UnMeasuredIdxs,MeasuredValues,Theta,SizeImage,Tr
         if SmallUnMeasuredIdxs.size==0:
             UpdateRadius=int(UpdateRadius*UpdateERDParams.IncreaseRadiusBy)
         else:
-            Done=1
+            Done = 1
 
     
     # Find neighbors of unmeasured locations
@@ -74,22 +74,21 @@ def FindNeighbors(TrainingInfo,MeasuredIdxs,UnMeasuredIdxs,MeasuredValues,Resolu
     Neigh = NearestNeighbors(n_neighbors=TrainingInfo.NumNbrs)
     Neigh.fit(MeasuredIdxs)
     NeighborDistances, NeighborIndices = Neigh.kneighbors(UnMeasuredIdxs)
-    NeighborDistances=NeighborDistances*Resolution
-#    print(np.max(NeighborIndices))
-#    print(MeasuredValues.shape)
-    NeighborValues=MeasuredValues[NeighborIndices]
-#    print(NeighborValues.shape)
-
-    NeighborWeights=computeNeighborWeights(NeighborDistances,TrainingInfo)
+    NeighborDistances = NeighborDistances * Resolution
+    #print(np.max(NeighborIndices))
+    #print(MeasuredValues.shape)
+    NeighborValues = MeasuredValues[NeighborIndices]
+    #print(NeighborValues.shape)
+    NeighborWeights = computeNeighborWeights(NeighborDistances,TrainingInfo)
     
     return(NeighborValues,NeighborWeights,NeighborDistances)
 
 def ComputeRecons(TrainingInfo,NeighborValues,NeighborWeights,SizeImage,UnMeasuredIdxs,MeasuredIdxs,MeasuredValues):
     
     # Perform reconstruction
-    ReconValues=computeWeightedMRecons(NeighborValues,NeighborWeights,TrainingInfo)
-    ReconImage = np.zeros((SizeImage[0],SizeImage[1]))
-    ReconImage[UnMeasuredIdxs[:,0],UnMeasuredIdxs[:,1]]=ReconValues
-    ReconImage[MeasuredIdxs[:,0],MeasuredIdxs[:,1]]=MeasuredValues
+    ReconValues = computeWeightedMRecons(NeighborValues,NeighborWeights,TrainingInfo)
+    ReconImage = np.zeros((SizeImage[0], SizeImage[1]))
+    ReconImage[UnMeasuredIdxs[:,0], UnMeasuredIdxs[:,1]] = ReconValues
+    ReconImage[MeasuredIdxs[:,0], MeasuredIdxs[:,1]] = MeasuredValues
 
     return(ReconValues,ReconImage)

@@ -1,22 +1,20 @@
 #! /usr/bin/env python3
+
 import matplotlib.pyplot as plt
 import pylab
 
-
 def plotImage(Image,Num):
-
     plt.imshow(Image)
     pylab.show()
     
 def plotAfterSLADSSimulation(Im1,Im2,Im3):
-        
     plt.figure(1)                
     plt.subplot(131)          
     plt.imshow(Im1)
     plt.title('Sampled Mask')   
     plt.subplot(132)        
     plt.imshow(Im2)
-    plt.title('Reconstructed Image')   
+    plt.title('Reconstructed Image')  
     plt.subplot(133)   
     plt.imshow(Im3)
     plt.title('Ground-truth Image')

@@ -32,7 +32,6 @@ StopPercentageSLADS = 20
 FindStopThresh = 'N'
 # If 'Y', set the DesiredTD in L-1
 
-
 ###############################################################################
 ############## USER INPUTS: L-1 ###############################################
 ###############################################################################
@@ -46,14 +45,17 @@ WindowSize = [15,15]
 # Update ERD or compute full ERD in SLADS (to find best c)
 # with Update ERD, ERD only updated for a window surrounding new measurement
 Update_ERD = 'Y' 
+
 # Smallest ERD update window size permitted
 MinWindSize = 3  
+
 # Largest ERD update window size permitted  
 MaxWindSize = 15       
 
-# Initial Mask for SLADS (to find best c):
+### Initial Mask for SLADS (to find best c)
 # Percentage of samples in initial mask
 PercentageInitialMask = 1
+
 # Type of initial mask   
 MaskType = 'R'                   
 # Choices: 
@@ -71,7 +73,9 @@ DesiredTD=0
 ###############################################################################
 ############################ END USER INPUTS ##################################
 ###############################################################################
-NumReconsSLADS=10
-PercOfRD=20
+
+NumReconsSLADS = 10
+PercOfRD = 20
+
 from runTrainingScript import runTrainingScript
 runTrainingScript(ImageType,ImageExtension,TrainingImageSet,SizeImage,c_vec,StopPercentageSLADS,FindStopThresh,MeasurementPercentageVector,WindowSize,Update_ERD,MinWindSize,MaxWindSize,PercentageInitialMask,MaskType,DesiredTD,NumReconsSLADS,PercOfRD)                  
