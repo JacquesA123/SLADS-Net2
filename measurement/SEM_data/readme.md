@@ -1,0 +1,1 @@
+This folder is used to store SEM images that are then processed in the manner specified in the SLADS-Net paper to generate fake EDS spectra for CNN Training.
