@@ -14,22 +14,22 @@ FolderName = 'Example_1'
 ImageType = 'D'
 
 # If TrainingDB_Y was used for training enter 'Y'          
-TrainingImageSet = '1'   
+TrainingImageSet = '1'
 
 # Image resolution in pixels   
-SizeImage = [64,64]
+SizeImage = [256,256]
 
 # Value of c found in training     
-c=1
+c=2
 
 # Maximum  sampling percentage 
-StoppingPercentage = 50
+StoppingPercentage = 2
 # If you want to use stopping function used, enter threshold (from Training), 
 # else leave at 0        
-StoppingThrehsold = 0    
+StoppingThrehsold = 0 
 
 # Clasification setting
-Classify = 'N'              
+Classify = '2C'   
 # 'N' - no classification needed (already classified or continuous data)
 # '2C' - perform 2 class classification using otsu
 # 'MC' - perform multi-class classification

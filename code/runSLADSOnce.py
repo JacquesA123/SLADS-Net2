@@ -133,6 +133,15 @@ def runSLADSOnce(Mask,CodePath,SizeImage,StopCondParams,Theta,TrainingInfo,Resol
     # Plug in Your Measurement Routine
     # Please use 'MeasuredValues' as output variable
     # ContinuousMeasuredValues = perfromMeasurements(Mask)
+    HSI_full = np.load("measurement/data/validation_HSI.npy")
+    HSI = HSI_full[0]
+    del HSI_full
+    import sys
+    sys.path.append(r'C:\Users\nolan\OneDrive\Desktop\College\Research\ANL\SLADS\SLADS-Net\measurement')
+    from measurement.EDS_simulator import EDS_Simulator
+    EDS = EDS_Simulator(HSI)
+    EDS.generate_classifications()
+    ContinuousMeasuredValues = EDS.get_measured_values(MeasuredIdxs)
     ##################################################################
     
     if Classify=='2C':
@@ -163,6 +172,8 @@ def runSLADSOnce(Mask,CodePath,SizeImage,StopCondParams,Theta,TrainingInfo,Resol
         # Plug in Your Measurement Routine
         # Please use 'NewContValues' as output variable
         # NewContinuousValues = perfromMeasurements(NewIdxs)
+        NewContinuousValues = EDS.get_measured_values(NewIdxs)
+        
         ##################################################################    
         
         ContinuousMeasuredValues = np.hstack((ContinuousMeasuredValues,NewContinuousValues))

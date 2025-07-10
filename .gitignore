@@ -4,3 +4,5 @@ Scripts/
 share/
 pyvenv.cfg
 SLADS_env/
+measurement/lightning_logs/
+measurement/data/

@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+import pickle
 import sys
 import os
 import numpy as np
@@ -52,10 +53,17 @@ def runSLADSScript(FolderName,ImageType,TrainingImageSet,SizeImage,c,StoppingPer
         sys.exit('Error!!! The folder ' + TrainingDBPath + ' does not exist. Check entry for ' + TrainingImageSet)
     
     #Load Theta
+    #ThetaLoadPath = 'ResultsAndData' + os.path.sep + 'TrainingSavedFeatures' + os.path.sep + TrainingDBName + os.path.sep + 'c_' + str(c) + os.path.sep
+    #if not os.path.exists(ThetaLoadPath)#:                                                                                                                          
+    #    sys.exit('Error!!! Check folder ./ResultsAndData/TrainingSavedFeatures/TrainingDB_' + TrainingImageSet + ' for folder c_' + str(c))                                                                                                                                  
+    #Theta=np.transpose(np.load(ThetaLoadPath +'Theta.npy'))
+    #Load Theta
     ThetaLoadPath = 'ResultsAndData' + os.path.sep + 'TrainingSavedFeatures' + os.path.sep + TrainingDBName + os.path.sep + 'c_' + str(c) + os.path.sep
     if not os.path.exists(ThetaLoadPath):                                                                                                                          
         sys.exit('Error!!! Check folder ./ResultsAndData/TrainingSavedFeatures/TrainingDB_' + TrainingImageSet + ' for folder c_' + str(c))                                                                                                                                  
-    Theta=np.transpose(np.load(ThetaLoadPath +'Theta.npy'))
+#    Theta=np.transpose(np.load(ThetaLoadPath +'Theta.npy'))
+    with open(ThetaLoadPath + 'Theta.pkl', 'rb') as fid:
+        Theta = pickle.load(fid)
     
     # Load initial measurement mask
     loadPathInitialMask = CodePath + 'ResultsAndData' + os.path.sep + 'InitialSamplingMasks'
