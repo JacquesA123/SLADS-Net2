@@ -1,8 +1,15 @@
 #! /usr/bin/env python3
 import sys
-sys.path.append('code')
 import warnings
+import os
 warnings.filterwarnings("ignore")
+
+# Appended all of these to path due to the way my (Jacques) local virtual environment was set up
+os.chdir('SLADS-Net')
+sys.path.append('code')
+sys.path.append('ResultsAndData')
+sys.path.append('measurement')
+
 ###############################################################################
 ############## USER INPUTS: L-0 ###############################################
 ###############################################################################
@@ -23,7 +30,11 @@ SizeImage = [256,256]
 c=2
 
 # Maximum  sampling percentage 
+<<<<<<< HEAD
+StoppingPercentage = 20
+=======
 StoppingPercentage = 2
+>>>>>>> b932f4450740b28319725338251acc976b8f1aa9
 # If you want to use stopping function used, enter threshold (from Training), 
 # else leave at 0        
 StoppingThrehsold = 0 
