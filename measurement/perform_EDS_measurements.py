@@ -12,11 +12,7 @@ def perform_single_EDS_measurement(coordinate):
     SavePath = r"C:\PhenomData\FastAPI Tests\AcquiringSpotSpectrum"
     MainPath = "/"
     sample_name = 'FastAPI_test_sample'
-<<<<<<< HEAD
     dwell_time = 4
-=======
-    dwell_time = 7
->>>>>>> b932f4450740b28319725338251acc976b8f1aa9
 
     # Make timestamped folder
     # Get the current time as a string

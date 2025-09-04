@@ -30,11 +30,7 @@ SizeImage = [256,256]
 c=2
 
 # Maximum  sampling percentage 
-<<<<<<< HEAD
-StoppingPercentage = 20
-=======
 StoppingPercentage = 2
->>>>>>> b932f4450740b28319725338251acc976b8f1aa9
 # If you want to use stopping function used, enter threshold (from Training), 
 # else leave at 0        
 StoppingThrehsold = 0 

@@ -1,10 +1,6 @@
 # Run Nickel Spheres EDS Analysis
 
-<<<<<<< HEAD
 import AutoPhenom as ap
-=======
-import ParticleImageSegmentationLibrary as pisl
->>>>>>> b932f4450740b28319725338251acc976b8f1aa9
 import PyPhenom as ppi
 import license
 
@@ -16,11 +12,7 @@ phenom = ppi.Phenom(address,  license.PhenomUsername,  license.PhenomPassword)
 
 # Project Folder
 save_path = r"C:\PhenomData\NickelSpheres\Segmentation Project\Testing\Image Chain Tests\Test5"
-<<<<<<< HEAD
 project_path = ap.create_timestamped_folder(save_path)
-=======
-project_path = pisl.create_timestamped_folder(save_path)
->>>>>>> b932f4450740b28319725338251acc976b8f1aa9
 
 
 # Sampling Area Settings
@@ -52,10 +44,6 @@ max_binary_value = 255 # Values above the threshold intensity will be set to thi
 total_number_of_particles = 0 # This global variable will be updated throughout the imaging process and eventually stored as project metadata
 
 # Perform Chain Imaging
-<<<<<<< HEAD
 ap.perform_chain_imaging(phenom, project_path, threshold_intensity, max_binary_value, minimum_particle_radius, sample_area_center, sample_area_length, shift_between_images_length, sample_name, address, number_of_sampling_points_per_particle, SEM_image_length, total_number_of_particles, dwell_time, desired_number_of_particles, image_side_length_in_pixels)
-=======
-pisl.perform_chain_imaging(phenom, project_path, threshold_intensity, max_binary_value, minimum_particle_radius, sample_area_center, sample_area_length, shift_between_images_length, sample_name, address, number_of_sampling_points_per_particle, SEM_image_length, total_number_of_particles, dwell_time, desired_number_of_particles, image_side_length_in_pixels)
->>>>>>> b932f4450740b28319725338251acc976b8f1aa9
 
 

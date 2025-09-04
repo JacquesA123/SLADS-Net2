@@ -1,9 +1,6 @@
 
 import numpy as np
-<<<<<<< HEAD
 import os
-=======
->>>>>>> b932f4450740b28319725338251acc976b8f1aa9
 from model import CNN_Classifier
 import torch
 from torch import softmax, Tensor, load
@@ -65,11 +62,7 @@ class EDS_Manager:
             load(r"C:\Users\labuser\Downloads\PyPhenom (2.1)\PyPhenom\Jacques_Argonne_Internship\Phenom Repositories\SLADS-Net_V3\SLADS-Net\measurement\pretrained_models\CNN.pt", weights_only=True)
         )
     
-<<<<<<< HEAD
     def update(self, position, spectrum, save_folder):
-=======
-    def update(self, position, spectrum):
->>>>>>> b932f4450740b28319725338251acc976b8f1aa9
         spectrum = torch.tensor(spectrum).float().reshape(1, 1, 2048)
 
         # Forward pass
@@ -92,7 +85,6 @@ class EDS_Manager:
         # print(position[0])
         # print(position[1])
         self.image[position[0]][position[1]] = classification
-<<<<<<< HEAD
     
 
         # make sure the folder exists
@@ -108,8 +100,6 @@ class EDS_Manager:
 
 
 
-=======
->>>>>>> b932f4450740b28319725338251acc976b8f1aa9
         return classification
     
     def get_position(self, position):

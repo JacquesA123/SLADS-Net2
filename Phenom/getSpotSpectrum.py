@@ -54,11 +54,7 @@ def setSpot_test(phenom, imageSize, position):
     acqScanParams.hdr = False 
     acqScanParams.center = ppi.Position(position[0], position[1]) # This works for square images only. See manual to implement rectangular images
 
-<<<<<<< HEAD
-    acqScanParams.scale = 0.00001
-=======
     acqScanParams.scale = 0.001
->>>>>>> b932f4450740b28319725338251acc976b8f1aa9
     """mode = ppi.SemViewingMode(
         ppi.ScanMode.Spot,
         ppi.ScanParams(64, 64, 1, ppi.DetectorMode.All, False, 0, 

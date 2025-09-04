@@ -1,14 +1,8 @@
 # Test for Phenom API
 from fastapi import FastAPI
-<<<<<<< HEAD
 from AutoPhenom import create_timestamped_folder
 from AutoPhenom import AcquireSEMImage_at_current_location
 from AutoPhenom import getSpotSpectrum
-=======
-from ParticleImageSegmentationLibrary import create_timestamped_folder
-from ParticleImageSegmentationLibrary import AcquireSEMImage_at_current_location
-from getSpotSpectrum import getSpotSpectrum
->>>>>>> b932f4450740b28319725338251acc976b8f1aa9
 import os
 import PyPhenom as ppi
 import license
@@ -26,18 +20,12 @@ async def acquire_image(base_path: str, image_side_length_in_pixels: int, filena
     # Create a timestamped folder for this run
     run_folder = create_timestamped_folder(base_path, prefix="Run")
     
-<<<<<<< HEAD
     # Initialize the phenom
     phenom = ppi.Phenom(license.PhenomAddress, license.PhenomUsername, license.PhenomPassword)
     
     # Acquire the image in that folder
     full_image_path = os.path.join(run_folder, f"{filename}.png")  # or whatever extension your function uses
     AcquireSEMImage_at_current_location(run_folder, filename, image_side_length_in_pixels, phenom)
-=======
-    # Acquire the image in that folder
-    full_image_path = os.path.join(run_folder, f"{filename}.png")  # or whatever extension your function uses
-    AcquireSEMImage_at_current_location(run_folder, filename, image_side_length_in_pixels)
->>>>>>> b932f4450740b28319725338251acc976b8f1aa9
     
     return {
         "message": "Image acquired successfully",
