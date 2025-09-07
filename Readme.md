@@ -312,17 +312,13 @@ This script allows the user to run an actual SLADS Energy-Dispersive Spectroscop
 
 	3.1 On your Phenom SEM, create two virtual environments as shown:
 
+      ```sh
       Repositories/
       ├── SLADS-Env/
       │   └── SLADS-Net/
       └── Phenom-Env/
           └── Phenom/ (this is the folder called "Phenom" contained in this SLADS-Net Github repo)
-      
-      Repositories/
-      ├── SLADS-Env/
-      │   └── SLADS-Net/
-      └── Phenom-Env/
-         └── Phenom/   # folder named "Phenom" contained in this SLADS-Net repo
+      ```
 
 
       - In SLADS-Env, use pip to install the packages listed in the requirements.txt file directly located in SLADS-Net
