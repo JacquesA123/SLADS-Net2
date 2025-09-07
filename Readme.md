@@ -338,7 +338,7 @@ This script allows the user to run an actual SLADS Energy-Dispersive Spectroscop
    - This creates a web server, which allows one to call the functions in Acquire_Image.py from anywhere simply using code like this:
       
    ```sh
-      url = "http://127.0.0.1:8000/acquire_EDS_spot_spectrum"
+   url = "http://127.0.0.1:8000/acquire_EDS_spot_spectrum"
     params = {
         "i": i,
         "j": j,
