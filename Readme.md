@@ -305,12 +305,25 @@ This script allows the user to run an actual SLADS Energy-Dispersive Spectroscop
 	    - if for group-wise sampling needs to be changed
 	    - if the user wants to modify ERD update window size for SLADS
 
-3. Set up virtual environments
+3. Set up PyPhenom and virtual environments
 
-   Since the version of PyPhenom (API used to communicate with the Phenom SEM) our lab uses is only compatible with Python 3.8 and below, but the SLADS training scripts utilize PyTorch (which requires Python 3.9 and above), our solution was to create two virtual environments, SLADS-Env and Phenom-Env.
+   Since the version of PyPhenom (API used to communicate with the Phenom SEM) the Phatak lab has access to is only compatible with Python 3.8 and below, but the SLADS training scripts utilize PyTorch (which requires Python 3.9 and above), our solution was to create two virtual environments, SLADS-Env and Phenom-Env.
+
+   3.1 PyPhenom installation instructions (already been done on the computer in the Phatak SEM lab, but still written out for future reference)
+
+   - Install Python 3.8 onto the lab's PC (admin may be needed for this installation)
+   - Run the PyPhenom installer that is compatible with Python 3.8 (should be something like PyPhenom38-x64.exe), which can be found in the PhenomRelated subfolder of the folder called 'Jacques_Argonne_Internship'. It is essential to install PyPhenom onto the Python 3.8 that you've just installed.
+   - Follow step 3.2, but when creating Phenom-Env, make sure to create it using the Python 3.8 you've just downloaded. The command to create this virtual environment should look something like: 
+   ```sh
+   C:\Python38\python.exe -m venv C:\Envs\PhenomEnv
+   ```
+   - Confirm that PyPhenom is accessible through the Phenom-Env virtual environment by activating Phenom-Env and running:
+   ```sh
+   import PyPhenom
+   ```
 
 
-	3.1 On your Phenom SEM, create two virtual environments as shown:
+	3.2 On your Phenom SEM, create two virtual environments as shown:
 
       ```sh
       Repositories/
@@ -324,7 +337,7 @@ This script allows the user to run an actual SLADS Energy-Dispersive Spectroscop
       - In SLADS-Env, use pip to install the packages listed in the requirements.txt file directly located in SLADS-Net
       - In Phenom-Env, use pip to install the packages listed in the requirements.txt file located in the 'Phenom' subdirectory of SLADS-Net
    
-	3.2. In runSLADS.py modify section 'USER INPUTS: L-1'
+	3.3. In runSLADS.py modify section 'USER INPUTS: L-1'
 	    - if for group-wise sampling needs to be changed
 	    - if the user wants to modify ERD update window size for SLADS
 
