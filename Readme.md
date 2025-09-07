@@ -323,6 +323,7 @@ This script allows the user to run an actual SLADS Energy-Dispersive Spectroscop
 
       - In SLADS-Env, use pip to install the packages listed in the requirements.txt file directly located in SLADS-Net
       - In Phenom-Env, use pip to install the packages listed in the requirements.txt file located in the 'Phenom' subdirectory of SLADS-Net
+   
 	3.2. In runSLADS.py modify section 'USER INPUTS: L-1'
 	    - if for group-wise sampling needs to be changed
 	    - if the user wants to modify ERD update window size for SLADS
@@ -336,6 +337,7 @@ This script allows the user to run an actual SLADS Energy-Dispersive Spectroscop
 
    - This creates a web server, which allows one to call the functions in Acquire_Image.py from anywhere simply using code like this:
       
+   ```sh
       url = "http://127.0.0.1:8000/acquire_EDS_spot_spectrum"
     params = {
         "i": i,
@@ -347,7 +349,7 @@ This script allows the user to run an actual SLADS Energy-Dispersive Spectroscop
         "sample_name": sample_name,
         "dwell_time": dwell_time
     }
-
+   ```
     response = requests.get(url, params=params)
 
    - The first part of the URL signifies the FastAPI server you've created for Acquire_Image.py. The second part "acquire_EDS_spot_spectrum" signifies the function you want to call from Acquire_Image.py.  
