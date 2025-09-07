@@ -318,6 +318,13 @@ This script allows the user to run an actual SLADS Energy-Dispersive Spectroscop
       └── Phenom-Env/
           └── Phenom/ (this is the folder called "Phenom" contained in this SLADS-Net Github repo)
       
+      Repositories/
+      ├── SLADS-Env/
+      │   └── SLADS-Net/
+      └── Phenom-Env/
+         └── Phenom/   # folder named "Phenom" contained in this SLADS-Net repo
+
+
       - In SLADS-Env, use pip to install the packages listed in the requirements.txt file directly located in SLADS-Net
       - In Phenom-Env, use pip to install the packages listed in the requirements.txt file located in the 'Phenom' subdirectory of SLADS-Net
 	3.2. In runSLADS.py modify section 'USER INPUTS: L-1'
