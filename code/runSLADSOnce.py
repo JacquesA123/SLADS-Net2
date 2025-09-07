@@ -147,8 +147,10 @@ def runSLADSOnce(Mask,CodePath,SizeImage,StopCondParams,Theta,TrainingInfo,Resol
     EDS = EDS_Manager((256, 256))
     ContinuousMeasuredValues = np.zeros((655,))
 
+    ###### This classification_save_folder is just used for testing. Feel free to update the code by removing it.
     # Folder to save the classification image as it is updated
     classification_save_folder = r"C:\PhenomData\SLADS Trials\Trial 6\Classification Images"
+    ######
 
     for i, idx in enumerate(MeasuredIdxs):
         # Perform measurement at index
